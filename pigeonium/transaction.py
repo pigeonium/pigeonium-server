@@ -78,11 +78,11 @@ class Transaction(TransactionStruct):
                 adminSignature = True
         else:
             sourceWallet = Wallet.fromPublic(self.publicKey)
-            txData = (self.networkId.to_bytes(8,'big')+self.source+self.dest+self.currencyId+self.amount.to_bytes(8,'big')+self.feeAmount.to_bytes(8,'big')+self.inputData)
+            txData = (self.networkId.to_bytes(8,'big')+sourceWallet.address+self.dest+self.currencyId+self.amount.to_bytes(8,'big')+self.feeAmount.to_bytes(8,'big')+self.inputData)
             if sourceWallet.verifySignature(txData, self.signature):
                 sourceSignature = True
             try:
-                txData = (self.indexId.to_bytes(8,'big')+self.networkId.to_bytes(8,'big')+self.source+self.dest+
+                txData = (self.indexId.to_bytes(8,'big')+self.networkId.to_bytes(8,'big')+sourceWallet.address+self.dest+
                           self.currencyId+self.amount.to_bytes(8,'big')+self.feeAmount.to_bytes(8,'big')+self.inputData+self.timestamp.to_bytes(8,'big'))
                 if Wallet.fromPublic(Config.AdminPublicKey).verifySignature(txData, self.adminSignature):
                     adminSignature = True
