@@ -92,8 +92,9 @@ class Transaction(TransactionStruct):
 
     def execute(self):
         state = State(self.source, self.dest)
-        if not self.source == bytes(16) and state.getBalance(self.source, self.currencyId) < self.amount:
-            raise InsufficientBalance()
+        bal = state.getBalance(self.source, self.currencyId)
+        if not self.source == bytes(16) and bal < self.amount:
+            raise InsufficientBalance(self.source,self.currencyId,self.amount,bal)
         tx_sql, tx_params = self.toSql()
         state.cursor.execute(tx_sql, tx_params)
         if self.source == bytes(16):
