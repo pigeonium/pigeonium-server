@@ -198,7 +198,7 @@ async def post_transaction(transaction:api_types.TransactionPost) -> api_types.T
         tx.isContract = False
         tx_v = tx.verify()
         if not tx_v[0]:
-            raise HTTPException(status_code=400, detail="Invalid transaction")
+            raise pigeonium.error.InvalidTransaction()
         state = pigeonium.State(bytes(16), bytes(16))
         if state.isDuplicateSignature(tx.signature):
             raise pigeonium.error.InvalidSignature()
@@ -236,12 +236,12 @@ async def post_contract(contractPost:api_types.ContractPost) -> api_types.Transa
         tx.isContract = False
         tx_v = tx.verify()
         if not tx_v[0]:
-            raise HTTPException(status_code=400, detail="Invalid transaction")
+            raise pigeonium.error.InvalidTransaction()
         if not (senderBin == tx.source) or not (senderWallet.address == tx.source) or senderWallet.verifySignature(pigeonium.Utils.sha256(contract.script.encode()), signatureBin) is False:
-            raise HTTPException(status_code=400, detail="Invalid sender")
+            raise pigeonium.error.InvalidSignature()
         state = pigeonium.State(bytes(16), contract.address)
         if state.getScript(contract.address) is not None:
-            raise HTTPException(status_code=400, detail="Contract already deployed")
+            raise pigeonium.error.ContractError()
         tx.adminSign(state.nextIndexId(), pigeonium.Wallet.fromPrivate(pigeonium.Config.AdminPrivateKey))
 
         tx.execute()
