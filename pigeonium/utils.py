@@ -49,5 +49,9 @@ class Utils:
         return hashlib.sha256(string).digest()
 
     @staticmethod
-    def md5(string: bytes) -> bytes:
-        return hashlib.md5(string, usedforsecurity=False).digest()
+    def sha3_256(string: bytes) -> bytes:
+        return hashlib.sha3_256(string).digest()
+
+    @staticmethod
+    def sha3_512(string: bytes) -> bytes:
+        return hashlib.sha3_512(string).digest()

@@ -2,7 +2,6 @@ from .config import Config
 from .wallet import Wallet
 from .contract import Contract
 from .struct import Transaction as TransactionStruct
-from time import time
 from .state import State
 from .error import *
 

@@ -15,7 +15,7 @@ class Currency(CurrencyStruct):
     @classmethod
     def create(cls,name:str,symbol:str,issuer:bytes,supply:int=0):
         cu = cls()
-        cu.currencyId = Utils.md5(Utils.sha256(name.encode()+symbol.encode()+issuer))
+        cu.currencyId = Utils.sha3_256(Utils.sha3_256(name.encode()+symbol.encode()+issuer))[:16]
         cu.name = name
         cu.symbol = symbol
         cu.issuer = issuer
@@ -25,4 +25,4 @@ class Currency(CurrencyStruct):
     def verify(self):
         if self.currencyId == bytes(16):
             return (self.name == Config.BaseCurrency.name) and (self.symbol == Config.BaseCurrency.symbol) and (self.issuer == Config.BaseCurrency.issuer)
-        return Utils.md5(Utils.sha256(self.name.encode()+self.symbol.encode()+self.issuer)) == self.currencyId
+        return Utils.sha3_256(Utils.sha3_256(self.name.encode()+self.symbol.encode()+self.issuer))[:16] == self.currencyId

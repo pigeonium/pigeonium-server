@@ -241,7 +241,7 @@ async def post_contract(contractPost:api_types.ContractPost) -> api_types.Transa
         tx_v = tx.verify()
         if not tx_v[0]:
             raise pigeonium.error.InvalidTransaction()
-        if not (senderBin == tx.source) or not (senderWallet.address == tx.source) or senderWallet.verifySignature(pigeonium.Utils.sha256(contract.script.encode()), signatureBin) is False:
+        if not (senderBin == tx.source) or not (senderWallet.address == tx.source) or senderWallet.verifySignature(pigeonium.Utils.sha3_256(contract.script.encode()), signatureBin) is False:
             raise pigeonium.error.InvalidSignature()
         state = pigeonium.State(bytes(16), contract.address)
         if state.getScript(contract.address) is not None:

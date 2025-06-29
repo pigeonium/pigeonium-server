@@ -1,5 +1,3 @@
-from time import time
-
 class Transaction:
     def __init__(self) -> None:
         self.indexId:int = None
