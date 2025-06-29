@@ -25,6 +25,8 @@ pigeonium.Config.MySQLConnection = mysql.connector.connect(
     password=ServerConfig.MySQL.password, database=ServerConfig.MySQL.database
 )
 
+state = None
+
 def create_genesis_tx():
     state = pigeonium.State(bytes(16), bytes(16))
     if state.getTransaction(0) is None and state.getCurrency(pigeonium.Config.BaseCurrency.currencyId) is None:
@@ -153,8 +155,9 @@ async def get_transactions(
             pigeonium.Config.MySQLConnection.rollback()
         raise e
     finally:
-        if state and state.cursor:
-            state.cursor.close()
+        try:
+            if state and state.cursor: state.cursor.close()
+        except UnboundLocalError: pass
 
 @router.get("/variable/{address}/{varKey}")
 async def get_variable(address:str, varKey:str):
@@ -212,8 +215,9 @@ async def post_transaction(transaction:api_types.TransactionPost) -> api_types.T
             pigeonium.Config.MySQLConnection.rollback()
         raise e
     finally:
-        if state and state.cursor:
-            state.cursor.close()
+        try:
+            if state and state.cursor: state.cursor.close()
+        except UnboundLocalError: pass
 
 @router.post("/contract")
 async def post_contract(contractPost:api_types.ContractPost) -> api_types.Transaction:
@@ -255,5 +259,6 @@ async def post_contract(contractPost:api_types.ContractPost) -> api_types.Transa
             pigeonium.Config.MySQLConnection.rollback()
         raise e
     finally:
-        if state and state.cursor:
-            state.cursor.close()
+        try:
+            if state and state.cursor: state.cursor.close()
+        except UnboundLocalError: pass

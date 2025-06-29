@@ -64,12 +64,16 @@ async def generic_exception_handler(request: Request, exc: Exception):
     """
     予期せぬサーバーエラーを処理する
     """
+    if isinstance(exc, ValueError):
+        status_code=status.HTTP_400_BAD_REQUEST
+        content=ErrorResponse(errorCode="ValueError", message=str(exc))
+    else:
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        content=ErrorResponse(errorCode="InternalServerError", message=f"An unexpected error occurred: {str(exc)}")
+
     return JSONResponse(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content=ErrorResponse(
-            errorCode="InternalServerError",
-            message=f"An unexpected error occurred: {str(exc)}"
-        ).model_dump()
+        status_code=status_code,
+        content=content.model_dump()
     )
 
 
