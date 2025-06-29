@@ -20,7 +20,7 @@ class Wallet(WalletStruct):
         public_key = private_key.get_verifying_key().to_string()
         wallet.privateKey = private_key.to_string()
         wallet.publicKey = public_key
-        wallet.address = Utils.md5(Utils.sha256(public_key))
+        wallet.address = Utils.md5(Utils.sha256(Utils.sha256(Utils.sha256(public_key))))
 
         return wallet
     
@@ -31,7 +31,7 @@ class Wallet(WalletStruct):
         public_key = private_key.get_verifying_key().to_string()
         wallet.privateKey = private_key.to_string()
         wallet.publicKey = public_key
-        wallet.address = Utils.md5(Utils.sha256(public_key))
+        wallet.address = Utils.md5(Utils.sha256(Utils.sha256(Utils.sha256(public_key))))
         return wallet
     
     @classmethod
@@ -39,7 +39,7 @@ class Wallet(WalletStruct):
         wallet = cls()
         wallet.privateKey = None
         wallet.publicKey = publicKey
-        wallet.address = Utils.md5(Utils.sha256(publicKey))
+        wallet.address = Utils.md5(Utils.sha256(Utils.sha256(Utils.sha256(publicKey))))
         return wallet
     
     def sign(self,data:bytes) -> bytes:

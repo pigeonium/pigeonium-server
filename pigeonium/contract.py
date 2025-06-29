@@ -9,7 +9,7 @@ from asteval import Interpreter
 class Contract:
     def __init__(self, script:str) -> None:
         self.script = script
-        self.address = Utils.md5(Utils.sha256(script.encode()))
+        self.address = Utils.md5(Utils.sha256(Utils.sha256(Utils.sha256(script.encode()))))
         self.deployCost = len(script.encode()) * Config.ContractDeployCost
         self.excutionCost = len(script.encode()) * Config.ContractExecutionCost
 
@@ -20,7 +20,7 @@ class Contract:
         return self.__str__()
     
     def verify(self):
-        return self.address == Utils.md5(Utils.sha256(self.script.encode()))
+        return self.address == Utils.md5(Utils.sha256(Utils.sha256(Utils.sha256(self.script.encode()))))
 
     def execute(self, transaction:Transaction, state:State):
         try:
