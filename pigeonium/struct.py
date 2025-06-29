@@ -102,7 +102,7 @@ class Transaction:
     def genesis(cls, adminWallet:"Wallet", dest:bytes, currencyId:bytes, amount:int, timestamp:int) -> "Transaction":
         pass
     
-    def adminSign(self, indexId:int, adminWallet:"Wallet", timestamp:int = int(time())):
+    def adminSign(self, indexId:int, adminWallet:"Wallet", timestamp:int):
         pass
 
     def verify(self) -> tuple[bool,bool]:

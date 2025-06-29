@@ -202,7 +202,7 @@ async def post_transaction(transaction:api_types.TransactionPost) -> api_types.T
         state = pigeonium.State(bytes(16), bytes(16))
         if state.isDuplicateSignature(tx.signature):
             raise pigeonium.error.InvalidSignature()
-        tx.adminSign(state.nextIndexId(), pigeonium.Wallet.fromPrivate(pigeonium.Config.AdminPrivateKey))
+        tx.adminSign(state.nextIndexId(), pigeonium.Wallet.fromPrivate(pigeonium.Config.AdminPrivateKey), int(time()))
         state.cursor.close()
         tx.execute()
         pigeonium.Config.MySQLConnection.commit()
@@ -242,7 +242,7 @@ async def post_contract(contractPost:api_types.ContractPost) -> api_types.Transa
         state = pigeonium.State(bytes(16), contract.address)
         if state.getScript(contract.address) is not None:
             raise pigeonium.error.ContractError()
-        tx.adminSign(state.nextIndexId(), pigeonium.Wallet.fromPrivate(pigeonium.Config.AdminPrivateKey))
+        tx.adminSign(state.nextIndexId(), pigeonium.Wallet.fromPrivate(pigeonium.Config.AdminPrivateKey), int(time()))
 
         tx.execute()
 

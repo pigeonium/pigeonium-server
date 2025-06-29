@@ -59,7 +59,7 @@ class Transaction(TransactionStruct):
         tx.adminSignature = adminWallet.sign(txData)
         return tx
     
-    def adminSign(self, indexId:int, adminWallet:Wallet, timestamp:int = int(time())):
+    def adminSign(self, indexId:int, adminWallet:Wallet, timestamp:int):
         txData = (indexId.to_bytes(8,'big')+self.networkId.to_bytes(8,'big')+
                   self.source+self.dest+self.currencyId+self.amount.to_bytes(8,'big')+self.feeAmount.to_bytes(8,'big')+self.inputData+
                   self.signature+timestamp.to_bytes(8,'big'))
