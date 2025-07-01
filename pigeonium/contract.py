@@ -54,8 +54,9 @@ class Contract:
             aeval.symtable['getVariable'] = state.getVariable
             # aeval.symtable['getVariables'] = state.getVariables
             aeval.symtable['setVariable'] = state.setVariable
-            aeval.symtable['transferFromUser'] = state.transferFromUser
-            aeval.symtable['transferFromContract'] = state.transferFromContract
+            # aeval.symtable['transferFromUser'] = state.transferFromUser
+            # aeval.symtable['transferFromContract'] = state.transferFromContract
+            aeval.symtable['transfer'] = state.transferFromContract
             aeval.symtable['burn'] = state.burn
             aeval.symtable['mint'] = state.mint
             aeval.symtable['createCurrency'] = state.createCurrency
