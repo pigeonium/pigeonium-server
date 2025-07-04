@@ -196,8 +196,11 @@ class State:
         tx.adminSignature = Wallet.fromPrivate(Config.AdminPrivateKey).sign(txData)
         tx_sql, tx_params = tx.toSql()
         self.cursor.execute(tx_sql, tx_params)
+
+        bal = self.getBalance(self.userAddress, currencyId)
+        if bal < amount: raise InsufficientBalance(self.userAddress, currencyId, amount, bal)
         
-        if self.getBalance(self.userAddress, currencyId) == amount:
+        if bal == amount:
             self.cursor.execute("DELETE FROM balance WHERE address=%s AND currencyId=%s", (self.userAddress, currencyId))
         else:
             self.cursor.execute("UPDATE balance SET amount=amount-%s WHERE address=%s AND currencyId=%s",
@@ -233,8 +236,11 @@ class State:
         tx.adminSignature = Wallet.fromPrivate(Config.AdminPrivateKey).sign(txData)
         tx_sql, tx_params = tx.toSql()
         self.cursor.execute(tx_sql, tx_params)
-        
-        if self.getBalance(self.contractAddress, currencyId) == amount:
+
+        bal = self.getBalance(self.contractAddress, currencyId)
+        if bal < amount: raise InsufficientBalance(self.contractAddress, currencyId, amount, bal)
+
+        if bal == amount:
             self.cursor.execute("DELETE FROM balance WHERE address=%s AND currencyId=%s", (self.contractAddress, currencyId))
         else:
             self.cursor.execute("UPDATE balance SET amount=amount-%s WHERE address=%s AND currencyId=%s",

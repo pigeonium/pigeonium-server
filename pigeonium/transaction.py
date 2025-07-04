@@ -99,7 +99,10 @@ class Transaction(TransactionStruct):
         if self.source == bytes(16):
             state.cursor.execute("UPDATE currency SET supply = supply + %s WHERE currencyId = %s", (self.amount, self.currencyId))
         else:
-            state.cursor.execute("UPDATE balance SET amount = amount - %s WHERE address = %s AND currencyId = %s", (self.amount, self.source, self.currencyId))
+            if self.amount == bal:
+                state.cursor.execute("DELETE FROM balance WHERE address = %s AND currencyId = %s", (self.source, self.currencyId))
+            else:
+                state.cursor.execute("UPDATE balance SET amount = amount - %s WHERE address = %s AND currencyId = %s", (self.amount, self.source, self.currencyId))
         if self.dest == bytes(16):
             state.cursor.execute("UPDATE currency SET supply = supply - %s WHERE currencyId = %s", (self.amount, self.currencyId))
         else:
