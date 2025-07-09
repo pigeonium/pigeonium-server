@@ -203,6 +203,8 @@ async def post_transaction(transaction:api_types.TransactionPost) -> api_types.T
         if not tx_v[0]:
             raise pigeonium.error.InvalidTransaction()
         state = pigeonium.State(bytes(16), bytes(16))
+        if state.getScript(tx.dest) is None and tx.amount <= 0:
+            raise pigeonium.error.InvalidTransaction("Empty transaction")
         if state.isDuplicateSignature(tx.signature):
             raise pigeonium.error.InvalidSignature()
         tx.adminSign(state.nextIndexId(), pigeonium.Wallet.fromPrivate(pigeonium.Config.AdminPrivateKey), int(time()))
