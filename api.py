@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 import mysql.connector
 import pigeonium
-from pydantic import BaseModel
 import api_types
 from typing import Literal, Optional
 import config as ServerConfig
@@ -71,10 +70,28 @@ async def root() -> api_types.NetworkInfo:
     )
     return response
 
+@router.get("/currency")
+async def get_currency(
+    currencyId: Optional[str] = None,
+    name: Optional[str] = None,
+    symbol: Optional[str] = None,
+    issuer: Optional[str] = None
+) -> api_types.Currency:
+    argCurrencyId = bytes.fromhex(currencyId) if currencyId else None
+    argIssuer = bytes.fromhex(issuer) if issuer else None
+    cu = pigeonium.State(bytes(16), bytes(16)).getCurrency(argCurrencyId, name, symbol, argIssuer)
+    if cu is None:
+        raise HTTPException(status_code=400, detail="Invalid currency")
+    return api_types.Currency(
+        currencyId=cu.currencyId.hex(),
+        name=cu.name, symbol=cu.symbol,
+        issuer=cu.issuer.hex(), supply=cu.supply
+    )
+
 @router.get("/currency/{currencyId}")
 async def get_currency(currencyId:str) -> api_types.Currency:
     argCurrencyId = bytes.fromhex(currencyId)
-    cu = pigeonium.State(bytes(16), bytes(16)).getCurrency(argCurrencyId)
+    cu = pigeonium.State(bytes(16), bytes(16)).getCurrency(currencyId=argCurrencyId)
     if cu is None:
         raise HTTPException(status_code=400, detail="Invalid currency")
     return api_types.Currency(
