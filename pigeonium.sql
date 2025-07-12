@@ -14,7 +14,7 @@ CREATE TABLE `contract` (
 
 CREATE TABLE `currency` (
   `currencyId` binary(16) NOT NULL,
-  `name` varchar(32) COLLATE utf8mb4_0900_as_cs NOT NULL,
+  `name` varchar(24) COLLATE utf8mb4_0900_as_cs NOT NULL,
   `symbol` varchar(8) COLLATE utf8mb4_0900_as_cs NOT NULL,
   `issuer` binary(16) NOT NULL,
   `supply` bigint UNSIGNED NOT NULL
