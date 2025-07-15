@@ -19,12 +19,12 @@ class Pigeonium:
     InputDataCost: int = 10
     Decimals: int = 6
 
-    AdminPrivateKey: bytes = bytes(32)
-    AdminPublicKey: bytes = bytes(64)
+    AdminPrivateKey: bytes = bytes.fromhex("3d8ab89e855ec3afe8a83e3881a6ed1a392b672fba0ba4f3c0dce882a6bfc6f5")
+    AdminPublicKey: bytes = bytes.fromhex("5e99927233c52dd75f3e544b8a4649f481fc03239e5f8e193c30d2c70eba4272c765145e3bcfa05ace3bfcc2830ae91a8a66a39584e6eff4b3fca31882233835")
 
     BaseCurrency = Currency()
     BaseCurrency.currencyId = bytes(16)
     BaseCurrency.name = "Pigeon"
     BaseCurrency.symbol = "Pigeon"
-    BaseCurrency.issuer = bytes(16)
+    BaseCurrency.issuer = bytes.fromhex("123456120fd55b5a639c60a2f62612c2")
     BaseCurrency.supply = 1000000_000000 # = 1000000.000000
